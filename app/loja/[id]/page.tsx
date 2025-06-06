@@ -1,4 +1,6 @@
 // app/loja/[id]/page.tsx
+export const dynamic = "force-dynamic";
+
 import { listarLojas, listarProdutosDoVendedor } from "@/app/fakeDB";
 import ProdutoCard from "@/app/components/ProdutoCard";
 import Header from "@/app/components/Header";
