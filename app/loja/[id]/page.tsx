@@ -25,7 +25,7 @@ type LojaPageProps = {
   };
 };
 
-export default async function LojaPage({ params }: LojaPageProps) {
+export default function LojaPage({ params }: LojaPageProps) {
   const lojaId = parseInt(params.id);
   const loja = listarLojas().find((l) => l.id === lojaId);
 
