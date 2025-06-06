@@ -17,7 +17,13 @@ function renderStars(avaliacao: number) {
   return stars;
 }
 
-export default function LojaPage({ params }: { params: { id: string } }) {
+type LojaPageProps = {
+  params: {
+    id: string;
+  };
+};
+
+export default async function LojaPage({ params }: LojaPageProps) {
   const lojaId = parseInt(params.id);
   const loja = listarLojas().find((l) => l.id === lojaId);
 
@@ -27,7 +33,6 @@ export default function LojaPage({ params }: { params: { id: string } }) {
 
   const produtos = listarProdutosDoVendedor(loja.vendedorId);
 
-  // Exemplo de descrição fictícia
   const descricao =
     "Bem-vindo à nossa loja! Aqui você encontra produtos artesanais feitos com carinho e dedicação. Explore nossos produtos exclusivos e apoie o trabalho local.";
 
@@ -42,7 +47,7 @@ export default function LojaPage({ params }: { params: { id: string } }) {
             className="w-full md:w-64 h-48 object-cover rounded-xl shadow"
           />
           <div className="flex-1">
-            <h1 className="text-3xl font-bold mb-2 ">{loja.nome}</h1>
+            <h1 className="text-3xl font-bold mb-2">{loja.nome}</h1>
             <div className="flex items-center mb-2">
               {renderStars(loja.avaliacao)}
               <span className="ml-2 text-yellow-700 font-medium">
@@ -52,7 +57,7 @@ export default function LojaPage({ params }: { params: { id: string } }) {
             <p className="text-gray-700">{descricao}</p>
           </div>
         </div>
-        <h2 className="text-xl font-semibold mb-4 ">Produtos</h2>
+        <h2 className="text-xl font-semibold mb-4">Produtos</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {produtos.length > 0 ? (
             produtos.map((produto) => (

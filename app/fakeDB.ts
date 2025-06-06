@@ -32,8 +32,8 @@ let usuarios: Usuario[] = [
 ];
 
 const produtos: Produto[] = [
-  { id: 1, nome: "Escultura", preco: 120, imagem: "/escultura.jpg", vendedorId: 1 },
-  { id: 2, nome: "Pintura", preco: 80, imagem: "/pintura.jpg", vendedorId: 1 },
+  { id: 1, nome: "Escultura", preco: 120, imagem: "/assets/escultura.jpg", vendedorId: 1 },
+  { id: 2, nome: "Pintura", preco: 80, imagem: "/assets/pintura.jpg", vendedorId: 1 },
 ];
 
 let lojas: Loja[] = [
