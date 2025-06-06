@@ -5,6 +5,7 @@ import { useAuth } from "./context/AuthContext";
 import Header from "./components/Header";
 import LojaCard from "./components/LojaCard";
 import { listarLojas, Loja } from "./fakeDB";
+import SearchBar from "./components/SearchBar";
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -25,11 +26,18 @@ export default function HomePage() {
         ) : (
           <p className="mb-4">Você não está logado.</p>
         )}
+
+        {/* Barra de pesquisa renderiza as lojas */}
+        <SearchBar />
+
+        {/*
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {lojas.map((loja) => (
             <LojaCard key={loja.id} loja={loja} />
           ))}
         </div>
+        */}
+        
       </main>
     </div>
   );

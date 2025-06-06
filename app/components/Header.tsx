@@ -6,25 +6,32 @@ export default function Header() {
   const { user, logout } = useAuth();
 
   return (
-    <header className="bg-gray-100 py-4 px-6 flex justify-between items-center shadow-sm">
-      <Link href="/" className="text-xl font-bold text-gray-800">
+    <header
+      className="py-4 px-6 flex justify-between items-center shadow-sm"
+      style={{ backgroundColor: "rgb(107, 122, 140)" }}
+    >
+      <Link
+        href="/"
+        className="text-xl font-bold"
+        style={{ color: "white" }}
+      >
         Plataforma Artesanal
       </Link>
       <nav className="flex items-center gap-4">
         {user ? (
           <>
-            <span className="text-sm">Olá, {user.nome}</span>
+            <span className="text-sm text-white">Olá, {user.nome}</span>
             {user.tipo === "vendedor" && (
-              <Link href="/painel" className="text-sm text-blue-600 hover:underline">
+              <Link href="/painel" className="text-sm text-white hover:underline">
                 Painel
               </Link>
             )}
-            <button onClick={logout} className="text-sm text-red-500 hover:underline">
+            <button onClick={logout} className="text-sm text-red-200 hover:underline">
               Sair
             </button>
           </>
         ) : (
-          <Link href="/login" className="text-sm text-blue-600 hover:underline">
+          <Link href="/login" className="text-sm text-white hover:underline">
             Entrar
           </Link>
         )}

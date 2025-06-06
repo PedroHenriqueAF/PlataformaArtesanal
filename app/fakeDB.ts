@@ -56,10 +56,34 @@ let lojas: Loja[] = [
   {
     id: 3,
     nome: "Loja da Ana",
-    categoria: "Esculturas",
+    categoria: "Escultura",
     vendedorId: 3,
     imagem: "/assets/Loja da ana.jpg",
     avaliacao: 4.5,
+  },
+  {
+    id: 4,
+    nome: "Artesanato da Clara",
+    categoria: "Artesanato",
+    vendedorId: 1,
+    imagem: "/assets/artesanato.jpg",
+    avaliacao: 4.8,
+  },
+  {
+    id: 5,
+    nome: "Bijuterias da Ana",
+    categoria: "Bijuteria",
+    vendedorId: 2,
+    imagem: "/assets/Bijuteria.jpg",
+    avaliacao: 4.6,
+  },
+  {
+    id: 6,
+    nome: "Artesanato da Joana",
+    categoria: "Artesanato",
+    vendedorId: 3,
+    imagem: "/assets/artesanato da joana.jpg",
+    avaliacao: 4.9,
   },
 ];
 
