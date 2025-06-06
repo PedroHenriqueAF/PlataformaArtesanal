@@ -19,13 +19,7 @@ function renderStars(avaliacao: number) {
   return stars;
 }
 
-type LojaPageProps = {
-  params: {
-    id: string;
-  };
-};
-
-export default function LojaPage({ params }: LojaPageProps) {
+export default function LojaPage({ params }: { params: { id: string } }) {
   const lojaId = parseInt(params.id);
   const loja = listarLojas().find((l) => l.id === lojaId);
 
