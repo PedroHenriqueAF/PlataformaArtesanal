@@ -5,6 +5,13 @@ import { listarLojas, listarProdutosDoVendedor } from "@/app/fakeDB";
 import ProdutoCard from "@/app/components/ProdutoCard";
 import Header from "@/app/components/Header";
 
+type LojaPageProps = {
+  params: {
+    id: string;
+  };
+};
+
+
 function renderStars(avaliacao: number) {
   const stars = [];
   for (let i = 1; i <= 5; i++) {
@@ -19,7 +26,7 @@ function renderStars(avaliacao: number) {
   return stars;
 }
 
-export default async function LojaPage({ params }: { params: { id: string } }) {
+export default async function LojaPage({ params }: LojaPageProps) {
   const lojaId = parseInt(params.id);
   const loja = listarLojas().find((l) => l.id === lojaId);
 
