@@ -20,11 +20,33 @@ export default function HomePage() {
           Bem-vindo à Plataforma Artesanal
         </h1>
         {user ? (
-          <p className="mb-4">
-            Logado como: {user.nome} ({user.tipo})
-          </p>
+          <div className="mb-6 flex items-center gap-3 bg-green-100 border border-green-300 rounded-lg px-4 py-3 shadow-sm animate-fade-in">
+            <span className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-green-400 text-white font-bold text-lg shadow">
+              {user.nome.charAt(0).toUpperCase()}
+            </span>
+            <div>
+              <p className="font-semibold text-green-900">
+          Olá, <span className="underline">{user.nome}</span>!
+              </p>
+              <p className="text-green-700 text-sm">
+          Tipo de usuário: <span className="font-medium">{user.tipo}</span>
+              </p>
+            </div>
+          </div>
         ) : (
-          <p className="mb-4">Você não está logado.</p>
+          <div className="mb-6 flex items-center gap-3 bg-yellow-100 border border-yellow-300 rounded-lg px-4 py-3 shadow-sm animate-fade-in">
+            <span className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-yellow-400 text-white font-bold text-lg shadow">
+              ?
+            </span>
+            <div>
+              <p className="font-semibold text-yellow-900">
+          Você não está logado.
+              </p>
+              <p className="text-yellow-700 text-sm">
+          Faça login para acessar recursos exclusivos!
+              </p>
+            </div>
+          </div>
         )}
 
         {/* Barra de pesquisa renderiza as lojas */}

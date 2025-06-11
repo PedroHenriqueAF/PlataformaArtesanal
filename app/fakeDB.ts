@@ -11,7 +11,7 @@ export type Produto = {
   nome: string;
   preco: number;
   imagem: string;
-  vendedorId: number;
+  lojaId: number;
 };
 
 // app/fakeDB.ts
@@ -32,8 +32,8 @@ let usuarios: Usuario[] = [
 ];
 
 const produtos: Produto[] = [
-  { id: 1, nome: "Escultura", preco: 120, imagem: "/assets/escultura.jpg", vendedorId: 1 },
-  { id: 2, nome: "Pintura", preco: 80, imagem: "/assets/pintura.jpg", vendedorId: 1 },
+  { id: 1, nome: "Escultura", preco: 120, imagem: "/assets/escultura.jpg", lojaId: 1 },
+  { id: 2, nome: "Pintura", preco: 80, imagem: "/assets/pintura.jpg", lojaId: 1 },
 ];
 
 let lojas: Loja[] = [
@@ -96,8 +96,8 @@ export function listarLojas(): Loja[] {
   return lojas;
 }
 
-export function listarProdutosDoVendedor(vendedorId: number): Produto[] {
-  return produtos.filter((p) => p.vendedorId === vendedorId);
+export function listarProdutosDoVendedor(lojaId: number): Produto[] {
+  return produtos.filter((p) => p.lojaId === lojaId);
 }
 
 export function adicionarProduto(produto: Produto) {
