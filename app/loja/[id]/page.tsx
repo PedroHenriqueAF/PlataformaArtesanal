@@ -35,7 +35,7 @@ export default function LojaPage({ params }: { params: { id: string } }) {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gradient-to-br from-blue-700 via-blue-500 to-blue-400">
+      <div className="min-h-screen bg-gradient-to-br ">
         <div className="max-w-4xl mx-auto p-4 py-16">
           <div className="flex flex-col md:flex-row gap-8 mb-8 items-center md:items-start bg-blue-800 bg-opacity-90 rounded-2xl shadow-2xl p-6">
             <img
@@ -54,7 +54,7 @@ export default function LojaPage({ params }: { params: { id: string } }) {
               <p className="text-blue-100 text-lg">{descricao}</p>
             </div>
           </div>
-          <h2 className="text-2xl font-bold mb-5 text-white drop-shadow">Produtos</h2>
+          <h2 className="text-2xl font-bold mb-5 text-blue-800 drop-shadow">Produtos</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {produtos.length > 0 ? (
               produtos.map((produto) => (
@@ -71,7 +71,7 @@ export default function LojaPage({ params }: { params: { id: string } }) {
                 </div>
               ))
             ) : (
-              <p className="col-span-3 text-blue-100 text-center text-lg">Nenhum produto cadastrado.</p>
+              <p className="col-span-3 text-rgb(107, 122, 140) text-center text-lg">Nenhum produto cadastrado.</p>
             )}
           </div>
         </div>
