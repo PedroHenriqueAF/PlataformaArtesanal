@@ -5,17 +5,14 @@ import { listarLojas, listarProdutosDoVendedor } from "@/app/fakeDB";
 import ProdutoCard from "@/app/components/ProdutoCard";
 import Header from "@/app/components/Header";
 
-// O tipo para as props é inferido ou pode ser simplificado.
-// A definição de LojaPageProps pode ser removida.
-
+// 1. A tipagem das props da página foi corrigida aqui
 function renderStars(avaliacao: number) {
   const stars = [];
   for (let i = 1; i <= 5; i++) {
     if (avaliacao >= i) {
       stars.push(<span key={i} className="text-yellow-400 text-xl drop-shadow">★</span>);
     } else if (avaliacao >= i - 0.5) {
-      // Para meia estrela (opcional, mas visualmente interessante)
-      stars.push(<span key={i} className="text-yellow-400 text-xl drop-shadow">☆</span>); // Usando um caractere diferente para meia estrela
+      stars.push(<span key={i} className="text-yellow-400 text-xl drop-shadow">☆</span>);
     } else {
       stars.push(<span key={i} className="text-blue-200 text-xl">★</span>);
     }
@@ -23,7 +20,6 @@ function renderStars(avaliacao: number) {
   return stars;
 }
 
-// Corrija a tipagem diretamente nos parâmetros da função.
 export default function LojaPage({ params }: { params: { id: string } }) {
   const lojaId = parseInt(params.id);
   const loja = listarLojas().find((l) => l.id === lojaId);
@@ -32,8 +28,8 @@ export default function LojaPage({ params }: { params: { id: string } }) {
     return <div className="p-4 text-red-500">Loja não encontrada.</div>;
   }
 
-  // A busca de produtos deve usar o ID do vendedor associado à loja
-  const produtos = listarProdutosDoVendedor(loja.vendedorId);
+  // 2. A lógica para buscar produtos foi corrigida para usar o ID da loja
+  const produtos = listarProdutosDoVendedor(lojaId);
 
   const descricao =
     "Bem-vindo à nossa loja! Aqui você encontra produtos artesanais feitos com carinho e dedicação. Explore nossos produtos exclusivos e apoie o trabalho local.";
