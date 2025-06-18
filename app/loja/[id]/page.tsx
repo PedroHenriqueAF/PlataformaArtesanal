@@ -5,12 +5,8 @@ import { listarLojas, listarProdutosDoVendedor } from "@/app/fakeDB";
 import ProdutoCard from "@/app/components/ProdutoCard";
 import Header from "@/app/components/Header";
 
-type LojaPageProps = {
-  params: {
-    id: string;
-  };
-};
-
+// O tipo para as props é inferido ou pode ser simplificado.
+// A definição de LojaPageProps pode ser removida.
 
 function renderStars(avaliacao: number) {
   const stars = [];
@@ -18,7 +14,8 @@ function renderStars(avaliacao: number) {
     if (avaliacao >= i) {
       stars.push(<span key={i} className="text-yellow-400 text-xl drop-shadow">★</span>);
     } else if (avaliacao >= i - 0.5) {
-      stars.push(<span key={i} className="text-yellow-400 text-xl drop-shadow">☆</span>);
+      // Para meia estrela (opcional, mas visualmente interessante)
+      stars.push(<span key={i} className="text-yellow-400 text-xl drop-shadow">☆</span>); // Usando um caractere diferente para meia estrela
     } else {
       stars.push(<span key={i} className="text-blue-200 text-xl">★</span>);
     }
@@ -26,7 +23,8 @@ function renderStars(avaliacao: number) {
   return stars;
 }
 
-export default async function LojaPage({ params }: LojaPageProps) {
+// Corrija a tipagem diretamente nos parâmetros da função.
+export default function LojaPage({ params }: { params: { id: string } }) {
   const lojaId = parseInt(params.id);
   const loja = listarLojas().find((l) => l.id === lojaId);
 
@@ -34,6 +32,7 @@ export default async function LojaPage({ params }: LojaPageProps) {
     return <div className="p-4 text-red-500">Loja não encontrada.</div>;
   }
 
+  // A busca de produtos deve usar o ID do vendedor associado à loja
   const produtos = listarProdutosDoVendedor(loja.vendedorId);
 
   const descricao =
