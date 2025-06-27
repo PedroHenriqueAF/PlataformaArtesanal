@@ -1,7 +1,6 @@
-// context/AuthContext.tsx
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 type User = { id: number; nome: string; tipo: "cliente" | "vendedor" };
 
@@ -18,8 +17,22 @@ const AuthContext = createContext<{
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const login = (user: User) => setUser(user);
-  const logout = () => setUser(null);
+  // Carrega usuário do localStorage ao iniciar
+  useEffect(() => {
+    const stored = localStorage.getItem("user");
+    if (stored) setUser(JSON.parse(stored));
+  }, []);
+
+  const login = (user: User) => {
+    setUser(user);
+    localStorage.setItem("user", JSON.stringify(user));
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("auth"); // Remova o token também!
+  };
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

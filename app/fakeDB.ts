@@ -11,7 +11,7 @@ export type Produto = {
   nome: string;
   preco: number;
   imagem: string;
-  vendedorId: number;
+  lojaId: number;
 };
 
 // app/fakeDB.ts
@@ -32,8 +32,8 @@ let usuarios: Usuario[] = [
 ];
 
 const produtos: Produto[] = [
-  { id: 1, nome: "Escultura", preco: 120, imagem: "/escultura.jpg", vendedorId: 1 },
-  { id: 2, nome: "Pintura", preco: 80, imagem: "/pintura.jpg", vendedorId: 1 },
+  { id: 1, nome: "Escultura", preco: 120, imagem: "/assets/escultura.jpg", lojaId: 1 },
+  { id: 2, nome: "Pintura", preco: 80, imagem: "/assets/pintura.jpg", lojaId: 1 },
 ];
 
 let lojas: Loja[] = [
@@ -56,10 +56,34 @@ let lojas: Loja[] = [
   {
     id: 3,
     nome: "Loja da Ana",
-    categoria: "Esculturas",
+    categoria: "Escultura",
     vendedorId: 3,
     imagem: "/assets/Loja da ana.jpg",
     avaliacao: 4.5,
+  },
+  {
+    id: 4,
+    nome: "Artesanato da Clara",
+    categoria: "Artesanato",
+    vendedorId: 1,
+    imagem: "/assets/artesanato.jpg",
+    avaliacao: 4.8,
+  },
+  {
+    id: 5,
+    nome: "Bijuterias da Ana",
+    categoria: "Bijuteria",
+    vendedorId: 2,
+    imagem: "/assets/Bijuteria.jpg",
+    avaliacao: 4.6,
+  },
+  {
+    id: 6,
+    nome: "Artesanato da Joana",
+    categoria: "Artesanato",
+    vendedorId: 3,
+    imagem: "/assets/artesanato da joana.jpg",
+    avaliacao: 4.9,
   },
 ];
 
@@ -72,8 +96,8 @@ export function listarLojas(): Loja[] {
   return lojas;
 }
 
-export function listarProdutosDoVendedor(vendedorId: number): Produto[] {
-  return produtos.filter((p) => p.vendedorId === vendedorId);
+export function listarProdutosDoVendedor(lojaId: number): Produto[] {
+  return produtos.filter((p) => p.lojaId === lojaId);
 }
 
 export function adicionarProduto(produto: Produto) {
