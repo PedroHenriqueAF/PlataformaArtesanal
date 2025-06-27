@@ -31,19 +31,17 @@ export default function Header() {
             <span className="text-base text-white bg-blue-800 px-3 py-1 rounded-full shadow">
               Olá, <span className="font-semibold">{user.nome}</span>
             </span>
-            {user.tipo === "vendedor" && (
-              <Link
-                href="/painel"
-                className="text-base text-yellow-200 hover:text-yellow-300 font-medium transition"
-              >
-                Painel
-              </Link>
-            )}
+            <Link
+              href="/painel"
+              className="text-base text-yellow-200 hover:text-yellow-300 font-medium transition"
+            >
+              Painel
+            </Link>
             <button
               onClick={logout}
               className="text-base text-red-200 hover:text-red-400 font-medium transition px-3 py-1 rounded hover:bg-red-900/30"
             >
-              Sair
+              Sair da conta
             </button>
           </>
         ) : (

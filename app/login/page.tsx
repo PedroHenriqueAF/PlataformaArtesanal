@@ -6,23 +6,62 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
-import { getUsuarioPorNome } from "@/app/fakeDB";
 import Link from "next/link";
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login: contextLogin } = useAuth();
   const router = useRouter();
-  const [tab, setTab] = useState<"cliente" | "vendedor">("cliente");
   const [nome, setNome] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    const user = getUsuarioPorNome(nome);
-    if (user && user.tipo === tab) {
-      login(user);
-      router.push("/");
-    } else {
-      alert("Usuário não encontrado ou tipo incorreto");
+  type User = {
+    id: number;
+    nome: string;
+    tipo: "cliente" | "vendedor";
+    // Adicione outros campos conforme necessário
+  };
+
+  const login = (user: User, token: string) => {
+    contextLogin(user, token);
+    localStorage.setItem("auth", token); // Salva só o token
+    localStorage.setItem("user", JSON.stringify(user)); // Salva o usuário separado
+  };
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:3000/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nome, password }),
+      });
+
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
+
+      if (!response.ok) {
+        alert(data.message || "Erro ao fazer login");
+        setLoading(false);
+        return;
+      }
+
+      if (data.user && data.token) {
+        login(data.user, data.token);
+        router.push("/painel"); // Redireciona para o painel do usuário
+      } else {
+        alert("Usuário ou senha inválidos");
+      }
+    } catch (error) {
+      alert("Erro ao conectar ao servidor");
     }
+    setLoading(false);
   };
 
   return (
@@ -39,60 +78,35 @@ export default function LoginPage() {
         >
           ← Voltar para a página principal
         </Link>
-        <div className="flex mb-6 rounded-lg overflow-hidden border border-blue-200">
-          <button
-            className={`flex-1 py-2 text-xs sm:text-base font-semibold transition ${
-              tab === "cliente"
-                ? "bg-blue-500 text-white shadow"
-                : "bg-white text-blue-700 hover:bg-blue-50"
-            }`}
-            onClick={() => {
-              setTab("cliente");
-              setNome("");
-            }}
-          >
-            Cliente
-          </button>
-          <button
-            className={`flex-1 py-2 text-xs sm:text-base font-semibold transition ${
-              tab === "vendedor"
-                ? "bg-blue-700 text-white shadow"
-                : "bg-white text-blue-700 hover:bg-blue-50"
-            }`}
-            onClick={() => {
-              setTab("vendedor");
-              setNome("");
-            }}
-          >
-            Vendedor
-          </button>
-        </div>
         <h2 className="text-2xl sm:text-3xl font-extrabold mb-6 text-center text-blue-600 drop-shadow">
-          Login {tab === "cliente" ? "de Cliente" : "de Vendedor"}
+          Login
         </h2>
         <input
           type="text"
-          placeholder={
-            tab === "cliente"
-              ? "Nome do cliente"
-              : "Nome do vendedor"
-          }
+          placeholder="Nome do usuário"
           className="w-full border-2 border-blue-200 focus:border-blue-400 rounded-lg px-4 py-2 mb-4 text-sm sm:text-base outline-none transition shadow-sm bg-white/80"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
         />
+        <input
+          type="password"
+          placeholder="Senha"
+          className="w-full border-2 border-blue-200 focus:border-blue-400 rounded-lg px-4 py-2 mb-4 text-sm sm:text-base outline-none transition shadow-sm bg-white/80"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <button
           onClick={handleLogin}
           className="w-full bg-blue-500 text-white py-2 rounded-lg font-bold hover:scale-105 hover:shadow-lg transition text-sm sm:text-base"
+          disabled={loading}
         >
-          Entrar
+          {loading ? "Entrando..." : "Entrar"}
         </button>
         <div className="mt-8 text-xs sm:text-sm text-gray-500 text-center">
           <span className="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-semibold mr-1">
             Dica:
           </span>
-          Cliente = <b>Maria Cliente</b> <br />
-          Vendedor = <b>João Artesão</b>
+          Use seu nome de usuário e senha cadastrados.
         </div>
       </div>
     </div>
