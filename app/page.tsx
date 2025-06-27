@@ -4,9 +4,18 @@
 import { useAuth } from "./context/AuthContext";
 import Header from "./components/Header";
 import LojaCard from "./components/LojaCard";
-import { listarLojas, Loja } from "./fakeDB";
 import SearchBar from "./components/SearchBar";
 import { useEffect, useState } from "react";
+
+type Loja = {
+  id: number;
+  nome: string;
+  imagem: string;
+  avaliacao?: number;
+  descricao?: string;
+  categoria?: string; // Certifique-se que o backend retorna esse campo
+  // Outros campos conforme o backend
+};
 
 export default function HomePage() {
   const { user, login } = useAuth();
@@ -14,6 +23,9 @@ export default function HomePage() {
   const [token, setToken] = useState<string | null>(
     typeof window !== "undefined" ? localStorage.getItem("auth") : null
   );
+  const [lojas, setLojas] = useState<Loja[]>([]);
+  const [loadingLojas, setLoadingLojas] = useState(true);
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState<string>("");
 
   // Atualiza token ao mudar no localStorage (logout/login)
   useEffect(() => {
@@ -34,8 +46,7 @@ export default function HomePage() {
           });
           if (res.ok) {
             const data = await res.json();
-            setProfile(data.user || data); // Ajuste conforme resposta do backend
-            // Atualiza o contexto se necessário:
+            setProfile(data.user || data);
             if (data.user) login(data.user);
           } else {
             setProfile(null);
@@ -51,7 +62,33 @@ export default function HomePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, login]);
 
-  const lojas: Loja[] = listarLojas(); // ← pegando do "fakeDB"
+  // Buscar lojas do backend
+  useEffect(() => {
+    const fetchLojas = async () => {
+      setLoadingLojas(true);
+      try {
+        const res = await fetch("http://localhost:3000/lojas");
+        if (res.ok) {
+          const data = await res.json();
+          setLojas(data.lojas || data);
+        } else {
+          setLojas([]);
+        }
+      } catch {
+        setLojas([]);
+      }
+      setLoadingLojas(false);
+    };
+    fetchLojas();
+  }, []);
+
+  // Filtrar lojas por categoria selecionada
+  const lojasFiltradas = categoriaSelecionada
+    ? lojas.filter((loja) => loja.categoria === categoriaSelecionada)
+    : lojas;
+
+  // Gerar lista de categorias únicas
+  const categorias = Array.from(new Set(lojas.map((loja) => loja.categoria).filter(Boolean)));
 
   return (
     <div>
@@ -93,17 +130,44 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Barra de pesquisa renderiza as lojas */}
         <SearchBar />
 
-        {/*
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {lojas.map((loja) => (
-            <LojaCard key={loja.id} loja={loja} />
+        {/* Filtro de categoria */}
+        <div className="mb-6 flex gap-2 flex-wrap">
+          <button
+            className={`px-4 py-2 rounded ${!categoriaSelecionada ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"} font-semibold`}
+            onClick={() => setCategoriaSelecionada("")}
+          >
+            Todas as categorias
+          </button>
+          {categorias.map((cat) => (
+            <button
+              key={cat}
+              className={`px-4 py-2 rounded ${categoriaSelecionada === cat ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"} font-semibold`}
+              onClick={() => setCategoriaSelecionada(cat!)}
+            >
+              {cat}
+            </button>
           ))}
         </div>
-        */}
-        
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+          {loadingLojas ? (
+            <div className="col-span-3 text-center text-blue-700">Carregando lojas...</div>
+          ) : lojasFiltradas.length === 0 ? (
+            <div className="col-span-3 text-center text-gray-500">Nenhuma loja encontrada.</div>
+          ) : (
+            lojasFiltradas.map((loja) => (
+              <LojaCard
+                key={loja.id}
+                loja={{
+                  ...loja,
+                  avaliacao: loja.avaliacao ?? 0, // Garante que avaliacao nunca será undefined
+                }}
+              />
+            ))
+          )}
+        </div>
       </main>
     </div>
   );
