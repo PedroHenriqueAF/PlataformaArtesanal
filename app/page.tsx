@@ -9,8 +9,18 @@ import SearchBar from "./components/SearchBar";
 import { useEffect, useState } from "react";
 
 export default function HomePage() {
-  const { user, token, login } = useAuth();
+  const { user, login } = useAuth();
   const [profile, setProfile] = useState<any>(null);
+  const [token, setToken] = useState<string | null>(
+    typeof window !== "undefined" ? localStorage.getItem("auth") : null
+  );
+
+  // Atualiza token ao mudar no localStorage (logout/login)
+  useEffect(() => {
+    const onStorage = () => setToken(localStorage.getItem("auth"));
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
   useEffect(() => {
     // Se estiver logado e tiver token, busca o perfil atualizado
@@ -26,14 +36,19 @@ export default function HomePage() {
             const data = await res.json();
             setProfile(data.user || data); // Ajuste conforme resposta do backend
             // Atualiza o contexto se necessário:
-            if (data.user) login(data.user, token);
+            if (data.user) login(data.user);
+          } else {
+            setProfile(null);
           }
-        } catch (err) {
-          // Se der erro, não faz nada
+        } catch {
+          setProfile(null);
         }
+      } else {
+        setProfile(null);
       }
     };
     fetchProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, login]);
 
   const lojas: Loja[] = listarLojas(); // ← pegando do "fakeDB"

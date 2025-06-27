@@ -23,7 +23,7 @@ export default function LoginPage() {
   };
 
   const login = (user: User, token: string) => {
-    contextLogin(user, token);
+    contextLogin(user); // Corrigido: passa só o user
     localStorage.setItem("auth", token); // Salva só o token
     localStorage.setItem("user", JSON.stringify(user)); // Salva o usuário separado
   };
