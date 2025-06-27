@@ -5,13 +5,7 @@ import { listarLojas, listarProdutosDoVendedor } from "@/app/fakeDB";
 import ProdutoCard from "@/app/components/ProdutoCard";
 import Header from "@/app/components/Header";
 
-type LojaPageProps = {
-  params: {
-    id: string;
-  };
-};
-
-
+// 1. A tipagem das props da página foi corrigida aqui
 function renderStars(avaliacao: number) {
   const stars = [];
   for (let i = 1; i <= 5; i++) {
@@ -26,7 +20,7 @@ function renderStars(avaliacao: number) {
   return stars;
 }
 
-export default async function LojaPage({ params }: LojaPageProps) {
+export default function LojaPage({ params }: { params: { id: string } }) {
   const lojaId = parseInt(params.id);
   const loja = listarLojas().find((l) => l.id === lojaId);
 
@@ -34,7 +28,8 @@ export default async function LojaPage({ params }: LojaPageProps) {
     return <div className="p-4 text-red-500">Loja não encontrada.</div>;
   }
 
-  const produtos = listarProdutosDoVendedor(loja.vendedorId);
+  // 2. A lógica para buscar produtos foi corrigida para usar o ID da loja
+  const produtos = listarProdutosDoVendedor(lojaId);
 
   const descricao =
     "Bem-vindo à nossa loja! Aqui você encontra produtos artesanais feitos com carinho e dedicação. Explore nossos produtos exclusivos e apoie o trabalho local.";
